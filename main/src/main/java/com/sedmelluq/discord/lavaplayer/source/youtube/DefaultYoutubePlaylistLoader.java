@@ -64,34 +64,34 @@ public class DefaultYoutubePlaylistLoader implements YoutubePlaylistLoader {
     }
 
     JsonBrowser info = jsonResponse
-        .get("sidebar")
-        .get("playlistSidebarRenderer")
-        .get("items")
-        .index(0)
-        .get("playlistSidebarPrimaryInfoRenderer");
+            .get("sidebar")
+            .get("playlistSidebarRenderer")
+            .get("items")
+            .index(0)
+            .get("playlistSidebarPrimaryInfoRenderer");
 
     String playlistName = info
-        .get("title")
-        .get("runs")
-        .index(0)
-        .get("text")
-        .text();
+            .get("title")
+            .get("runs")
+            .index(0)
+            .get("text")
+            .text();
 
     JsonBrowser playlistVideoList = jsonResponse
-        .get("contents")
-        .get("twoColumnBrowseResultsRenderer")
-        .get("tabs")
-        .index(0)
-        .get("tabRenderer")
-        .get("content")
-        .get("sectionListRenderer")
-        .get("contents")
-        .index(0)
-        .get("itemSectionRenderer")
-        .get("contents")
-        .index(0)
-        .get("playlistVideoListRenderer")
-        .get("contents");
+            .get("contents")
+            .get("twoColumnBrowseResultsRenderer")
+            .get("tabs")
+            .index(0)
+            .get("tabRenderer")
+            .get("content")
+            .get("sectionListRenderer")
+            .get("contents")
+            .index(0)
+            .get("itemSectionRenderer")
+            .get("contents")
+            .index(0)
+            .get("playlistVideoListRenderer")
+            .get("contents");
 
     List<AudioTrack> tracks = new ArrayList<>();
     String continuationsToken = extractPlaylistTracks(playlistVideoList, tracks, trackFactory);
@@ -109,15 +109,15 @@ public class DefaultYoutubePlaylistLoader implements YoutubePlaylistLoader {
         JsonBrowser continuationJson = JsonBrowser.parse(response.getEntity().getContent());
 
         JsonBrowser playlistVideoListPage = continuationJson.index(1)
-            .get("response")
-            .get("continuationContents")
-            .get("playlistVideoListContinuation");
+                .get("response")
+                .get("continuationContents")
+                .get("playlistVideoListContinuation");
 
         if (playlistVideoListPage.isNull()) {
           playlistVideoListPage = continuationJson.get("onResponseReceivedActions")
-            .index(0)
-            .get("appendContinuationItemsAction")
-            .get("continuationItems");
+                  .index(0)
+                  .get("appendContinuationItemsAction")
+                  .get("continuationItems");
         }
 
         continuationsToken = extractPlaylistTracks(playlistVideoListPage, tracks, trackFactory);
@@ -143,8 +143,8 @@ public class DefaultYoutubePlaylistLoader implements YoutubePlaylistLoader {
             text = textObject.get("simpleText").text();
           } else {
             text = textObject.get("runs").values().stream()
-                .map(run -> run.get("text").text())
-                .collect(Collectors.joining());
+                    .map(run -> run.get("text").text())
+                    .collect(Collectors.joining());
           }
 
           return text;
@@ -190,16 +190,16 @@ public class DefaultYoutubePlaylistLoader implements YoutubePlaylistLoader {
         long duration = Units.secondsToMillis(lengthSeconds.asLong(Units.DURATION_SEC_UNKNOWN));
 
         AudioTrackInfo info = new AudioTrackInfo(title, author, duration, videoId, false,
-            "https://www.youtube.com/watch?v=" + videoId);
+                "https://www.youtube.com/watch?v=" + videoId);
 
         tracks.add(trackFactory.apply(info));
       }
     }
 
     JsonBrowser continuations = playlistTrackEntries.get(playlistTrackEntries.size() - 1)
-        .get("continuationItemRenderer")
-        .get("continuationEndpoint")
-        .get("continuationCommand");
+            .get("continuationItemRenderer")
+            .get("continuationEndpoint")
+            .get("continuationCommand");
 
     String continuationsToken;
     if (!continuations.isNull()) {
