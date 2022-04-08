@@ -150,7 +150,7 @@ public class DefaultYoutubePlaylistLoader implements YoutubePlaylistLoader {
         String title = item.get("title").text();
         String author = item.get("videoOwnerChannelTitle").text();
 
-        AudioTrackInfo info = new AudioTrackInfo(title, author, Long.MAX_VALUE, videoId, false,
+        AudioTrackInfo info = new AudioTrackInfo(title, author, 0, videoId, false,
                 "https://www.youtube.com/watch?v=" + videoId);
 
         tracks.add(trackFactory.apply(info));
