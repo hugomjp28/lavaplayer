@@ -29,7 +29,7 @@ public class DefaultYoutubePlaylistLoader implements YoutubePlaylistLoader {
   private static final String REQUEST_URL = "https://www.youtube.com/youtubei/v1/browse?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8";
   private static final String REQUEST_PAYLOAD = "{\"context\":{\"client\":{\"clientName\":\"WEB\",\"clientVersion\":\"2.20210302.07.01\"}},\"continuation\":\"%s\"}";
   private volatile int playlistPageCount = 6;
-  private static final String REQUEST_PLAYLIST = "https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&key=AIzaSyAA1do2B4XuM6xXkxhGrBjBxj7npXmBlWM&playlistId=";
+  private static final String REQUEST_PLAYLIST = "https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet,status&key=AIzaSyAA1do2B4XuM6xXkxhGrBjBxj7npXmBlWM&playlistId=";
   private static final String REQUEST_PLAYLIST_PAGE = "&pageToken=";
   @Override
   public void setPlaylistPageCount(int playlistPageCount) {
@@ -58,7 +58,7 @@ public class DefaultYoutubePlaylistLoader implements YoutubePlaylistLoader {
 
     String playlistName = json.get("etag").text();
 
-    setPlaylistPageCount(Integer.parseInt(json.get("pageInfo").get("totalResults").text())/5);
+    setPlaylistPageCount((Integer.parseInt(json.get("pageInfo").get("totalResults").text())/5)+1);
 
     JsonBrowser playlistVideoList = json
             .get("items");
@@ -144,14 +144,14 @@ public class DefaultYoutubePlaylistLoader implements YoutubePlaylistLoader {
     final List<JsonBrowser> playlistTrackEntries = playlistVideoList.values();
     for (JsonBrowser track : playlistTrackEntries) {
       JsonBrowser item = track.get("snippet");
-
+      String status = track.get("status").get("privacyStatus").text();
       // If the isPlayable property does not exist, it means the video is removed or private
       // If the shortBylineText property does not exist, it means the Track is Region blocked
-      if (!item.get("resourceId").isNull()) {
+      if (!item.get("resourceId").isNull() && !status.equals("private")) {
         String videoId = item.get("resourceId").get("videoId").text();
         String title = item.get("title").text();
         String author = item.get("videoOwnerChannelTitle").text();
-        long duration = 0;
+        long duration = 1;
 
         AudioTrackInfo info = new AudioTrackInfo(title, author, duration, videoId, false,
                 "https://www.youtube.com/watch?v=" + videoId);
