@@ -58,6 +58,8 @@ public class DefaultYoutubePlaylistLoader implements YoutubePlaylistLoader {
 
     String playlistName = json.get("etag").text();
 
+    setPlaylistPageCount(Integer.parseInt(json.get("pageInfo").get("totalResults").text())/5);
+
     JsonBrowser playlistVideoList = json
             .get("items");
 
