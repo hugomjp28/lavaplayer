@@ -145,15 +145,12 @@ public class DefaultYoutubePlaylistLoader implements YoutubePlaylistLoader {
     for (JsonBrowser track : playlistTrackEntries) {
       JsonBrowser item = track.get("snippet");
       String status = track.get("status").get("privacyStatus").text();
-      // If the isPlayable property does not exist, it means the video is removed or private
-      // If the shortBylineText property does not exist, it means the Track is Region blocked
       if (!item.get("resourceId").isNull() && !status.equals("private")) {
         String videoId = item.get("resourceId").get("videoId").text();
         String title = item.get("title").text();
         String author = item.get("videoOwnerChannelTitle").text();
-        long duration = 1;
 
-        AudioTrackInfo info = new AudioTrackInfo(title, author, duration, videoId, false,
+        AudioTrackInfo info = new AudioTrackInfo(title, author, Long.MAX_VALUE, videoId, false,
                 "https://www.youtube.com/watch?v=" + videoId);
 
         tracks.add(trackFactory.apply(info));
