@@ -52,9 +52,10 @@ public class YoutubeTrackJsonData {
         return new YoutubeTrackJsonData(playerResponse, NULL_BROWSER, null);
       }
     } catch (Exception e) {
+      System.out.println("deu merda no parsing");
       throw throwWithDebugInfo(log, e, "Error parsing result", "json", result.format());
     }
-
+    System.out.println("deu merda no player idk");
     throw throwWithDebugInfo(log, null, "Neither player nor playerResponse in result", "json", result.format());
   }
 

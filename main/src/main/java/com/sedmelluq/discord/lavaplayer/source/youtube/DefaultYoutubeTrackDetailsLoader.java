@@ -78,6 +78,7 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
 
     if (status == InfoStatus.CONTENT_CHECK_REQUIRED) {
       JsonBrowser trackInfo = loadTrackInfoWithContentVerifyRequest(httpInterface, videoId);
+      System.out.println("deu merda");
       return YoutubeTrackJsonData.fromMainResult(trackInfo);
     }
 
