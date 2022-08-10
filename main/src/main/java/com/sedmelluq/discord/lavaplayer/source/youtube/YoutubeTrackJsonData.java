@@ -28,7 +28,6 @@ public class YoutubeTrackJsonData {
     try {
       JsonBrowser playerInfo = NULL_BROWSER;
       JsonBrowser playerResponse = NULL_BROWSER;
-      System.out.println(result);
 		if (result.isMap()) {
 			playerInfo = result.get("player");
 			playerResponse = result.get("playerResponse");
@@ -42,6 +41,10 @@ public class YoutubeTrackJsonData {
 
           if (playerResponse.isNull()) {
             playerResponse = child.get("playerResponse");
+          }
+        } else {
+          if (playerResponse.isNull()) {
+            playerResponse = result;
           }
         }
       }
