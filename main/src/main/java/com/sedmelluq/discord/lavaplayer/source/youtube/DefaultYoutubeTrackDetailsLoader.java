@@ -216,7 +216,7 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
               .get("url")
               .text();
       if (fetchedContentVerifiedLink != null) {
-        return loadTrackInfoFromMainPage(httpInterface, fetchedContentVerifiedLink.substring(32));
+        return loadTrackInfoFromMainPage(httpInterface, fetchedContentVerifiedLink.substring(33));
       }
 
       log.error("Did not receive requested content verified link on track {} response: {}", videoId, json);
