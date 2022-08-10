@@ -76,16 +76,15 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
       return null;
     }
 
-    if (status == InfoStatus.CONTENT_CHECK_REQUIRED) {
+    if (status == InfoStatus.CONTENT_CHECK_REQUIRED || status == InfoStatus.REQUIRES_LOGIN) {
       JsonBrowser trackInfo = loadTrackInfoWithContentVerifyRequest(httpInterface, videoId);
       return YoutubeTrackJsonData.fromMainResult(trackInfo);
     }
 
-    if (requireFormats && status == InfoStatus.REQUIRES_LOGIN) {
-      System.out.println("login????");
+    /*if (requireFormats && status == InfoStatus.REQUIRES_LOGIN) {
       JsonBrowser trackInfo = loadTrackInfoFromInnertube(httpInterface, videoId);
       return YoutubeTrackJsonData.fromMainResult(trackInfo);
-    } else {
+    } */else {
       return data;
     }
   }
